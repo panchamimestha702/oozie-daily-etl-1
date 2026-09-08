@@ -1,0 +1,38 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="daily-etl">
+
+    <start to="extract"/>
+
+    <action name="extract">
+        <shell xmlns="uri:oozie:shell-action:0.3">
+            <exec>extract.sh</exec>
+            <file>extract.sh</file>
+        </shell>
+        <ok to="transform"/>
+        <error to="fail"/>
+    </action>
+
+    <action name="transform">
+        <shell xmlns="uri:oozie:shell-action:0.3">
+            <exec>transform.sh</exec>
+            <file>transform.sh</file>
+        </shell>
+        <ok to="load"/>
+        <error to="fail"/>
+    </action>
+
+    <action name="load">
+        <shell xmlns="uri:oozie:shell-action:0.3">
+            <exec>load.sh</exec>
+            <file>load.sh</file>
+        </shell>
+        <ok to="end"/>
+        <error to="fail"/>
+    </action>
+
+    <kill name="fail">
+        <message>ETL workflow failed</message>
+    </kill>
+
+    <end name="end"/>
+
+</workflow-app>
